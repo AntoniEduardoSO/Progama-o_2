@@ -1,5 +1,42 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:core';
+
+
+class Project
+{
+  late String name;
+  late String description;
+  final time_i;
+  late String time_f;
+  late String coordenation;
+  late String stocks;
+  late String duration;
+
+
+  Project(this.name, this.description, this.time_i, this.time_f, this.coordenation, this.stocks, this.duration);
+
+  String get nome => this.name;
+  void set nome(String value) => this.name = value;
+
+  String get descricao => this.description;
+  void set descricao(String value) => this.description = value;
+
+  String get hora_i => this.time_i;
+  void set hora_i(final value) => this.time_i = value;
+
+  String get hora_f => this.time_f;
+  void set hora_f(String value) => this.time_f = value;
+
+  String get coordenacao => this.coordenation;
+  void set coordenacao(String value) => this.coordenation = value;
+
+  String get bolsa => this.stocks;
+  void set bolsa(String value) => this.stocks = value;
+
+  String get vigencia => this.duration;
+  void set vigencia(String value) => this.duration = value;
+}
 
 
 class User
@@ -25,9 +62,39 @@ class User
 class Runner
 {
   List<User> user = [];
+  List<Project> project = [];
+
+
   bool application = true;
   late int escolha;
   int i = 0;
+
+
+  /*void criar_projeto(){
+    String lixo1, lixo2, lixo3, lixo4, lixo5, lixo6, lixo7, horarios;
+
+    print('Digite o nome do projeto(Não pode ter projetos com nomes repitidos!).');
+    lixo1 = stdin.readLineSync()!;
+
+    print('Digite a descrição do projeto.');
+    lixo2 = stdin.readLineSync()!;
+
+    print('Digite o horário de início do projeto(A data inicial contará pelo dia que foi feito o projeto)');
+    lixo3 = stdin.readLineSync()!;
+
+    print('Digite o nome do projeto(Não pode ter projetos com nomes repitidos!).');
+    lixo1 = stdin.readLineSync()!;
+
+    print('Digite o nome do projeto(Não pode ter projetos com nomes repitidos!).');
+    lixo1 = stdin.readLineSync()!;
+
+    print('Digite o nome do projeto(Não pode ter projetos com nomes repitidos!).');
+    lixo1 = stdin.readLineSync()!;
+
+    print('Digite o nome do projeto(Não pode ter projetos com nomes repitidos!).');
+    lixo1 = stdin.readLineSync()!;
+  }
+  */
 
   void removedor(){
     int escolha;
@@ -52,7 +119,11 @@ class Runner
             print('Tem certeza que deseja remover o usuário: ${user[i].name}? [Y/N]');
             String lixinho = stdin.readLineSync()!;
 
-            if(lixinho == 'Y') user.removeAt(i);
+            if(lixinho == 'Y'){
+              user.removeAt(i);
+              print('Usuário removido com sucesso.');
+            }
+
             else{
               print('Usuário não removido');
               break;
@@ -97,12 +168,10 @@ class Runner
     while(existo == true){
       print('digite o email da sua conta.');
       lixo = stdin.readLineSync()!;
-      var result = user.where((lixo) => user[i].email == lixo);
-      print('O resultado é esse: $result');
       
     
       
-      /*for(int i = 0; i < user.length;i++){
+      for(int i = 0; i < user.length;i++){
         if(lixo == user[i].endereco){
           print('Digite a nova senha');
           lixo = stdin.readLineSync()!;
@@ -110,9 +179,7 @@ class Runner
           existo = false;
         }
       }
-
       if(existo == true) print('Não achamos o seu email. Repita até achar seu email.');
-      */
     }
   }
 
@@ -136,8 +203,9 @@ class Runner
     while(application == true){
       print('[1] -> Cadastrar usuário.');
       print('[2] -> Recuperar senha.');
-      print('[3] -> Buscador');
-      print('[4] -> Removedor');
+      print('[3] -> Buscador.');
+      print('[4] -> Removedor.');
+      print('[5] -> Criar projeto.');
       
 
 
@@ -148,6 +216,7 @@ class Runner
         case(2): refazer_senha(); break;
         case(3): buscador(); break;
         case(4): removedor(); break;
+        // case(5): criar_projeto(); break;
       }
     }
   }
