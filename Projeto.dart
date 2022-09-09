@@ -241,9 +241,14 @@ class Runner
         case(1): cadastro(); break;
         case(2): login(); break;
         case(3): refazer_senha(); break;
-        case(4): buscador(); break;
-        case(5): removedor(); break;
-        // case(5): criar_projeto(); break;
+      }
+
+      if(this.loginho == true){
+        switch(escolha){
+          case(4): buscador(); break;
+          case(5): removedor(); break;
+          // case(6): criar_projeto(); break;
+        } 
       }
     }
   }
