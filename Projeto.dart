@@ -22,8 +22,8 @@ class Project
   String get descricao => this.description;
   void set descricao(String value) => this.description = value;
 
-  String get hora_i => this.time_i;
-  void set hora_i(final value) => this.time_i = value;
+  // String get hora_i => this.time_i;
+  // void set hora_i(final value) => this.time_i = value;
 
   String get hora_f => this.time_f;
   void set hora_f(String value) => this.time_f = value;
@@ -65,32 +65,25 @@ class Runner
   List<Project> project = [];
 
 
-  bool application = true;
+  bool application = true, loginho = false;
   late int escolha;
   int i = 0;
 
 
   /*void criar_projeto(){
     String lixo1, lixo2, lixo3, lixo4, lixo5, lixo6, lixo7, horarios;
-
     print('Digite o nome do projeto(Não pode ter projetos com nomes repitidos!).');
     lixo1 = stdin.readLineSync()!;
-
     print('Digite a descrição do projeto.');
     lixo2 = stdin.readLineSync()!;
-
     print('Digite o horário de início do projeto(A data inicial contará pelo dia que foi feito o projeto)');
     lixo3 = stdin.readLineSync()!;
-
     print('Digite o nome do projeto(Não pode ter projetos com nomes repitidos!).');
     lixo1 = stdin.readLineSync()!;
-
     print('Digite o nome do projeto(Não pode ter projetos com nomes repitidos!).');
     lixo1 = stdin.readLineSync()!;
-
     print('Digite o nome do projeto(Não pode ter projetos com nomes repitidos!).');
     lixo1 = stdin.readLineSync()!;
-
     print('Digite o nome do projeto(Não pode ter projetos com nomes repitidos!).');
     lixo1 = stdin.readLineSync()!;
   }
@@ -135,9 +128,10 @@ class Runner
 
 
   void buscador(){
-    int escolha;
+    int escolha, i;
     String lixo;
     bool existo = true;
+
     print('[1] -> Buscar por usuário');
     print('[2] -> Buscar por projeto.');
     print('[3] -> Buscar por atividade');
@@ -183,6 +177,33 @@ class Runner
     }
   }
 
+  void login(){
+    String lixo1, lixo2;
+    bool existo = false;
+
+    print('Digite o email.');
+    lixo1 = stdin.readLineSync()!;
+
+    print('Digite a senha.');
+    lixo2 = stdin.readLineSync()!;
+
+    for(int i = 0; i < user.length; i++){
+      if(lixo1 == user[i].email && lixo2 == user[i].password){
+        this.loginho = true;
+        this.i = i;
+        existo = true;
+      }
+    }
+
+    if(existo == false){
+      String teste;
+      print('Nao existe esse login, deseja tentar fazer o login novamente?[Y/N]');
+      teste = stdin.readLineSync()!;
+      if(teste == 'Y') login();
+    }
+  }
+
+
   void cadastro(){
     String lixo1, lixo2, lixo3;
 
@@ -201,21 +222,27 @@ class Runner
 
   void program (){
     while(application == true){
+      if(this.loginho == true) print('Bem-vindo usuário(a) ${user[i].name}');
+
       print('[1] -> Cadastrar usuário.');
-      print('[2] -> Recuperar senha.');
-      print('[3] -> Buscador.');
-      print('[4] -> Removedor.');
-      print('[5] -> Criar projeto.');
+      print('[2] -> Fazer login.');
+      print('[3] -> Recuperar senha.');
       
+      if(this.loginho == true){
+      print('[4] -> Buscador.');
+      print('[5] -> Removedor.');
+      print('[6] -> Criar projeto.');
+      }
 
 
       escolha = int.parse(stdin.readLineSync()!);
      
       switch(escolha){
         case(1): cadastro(); break;
-        case(2): refazer_senha(); break;
-        case(3): buscador(); break;
-        case(4): removedor(); break;
+        case(2): login(); break;
+        case(3): refazer_senha(); break;
+        case(4): buscador(); break;
+        case(5): removedor(); break;
         // case(5): criar_projeto(); break;
       }
     }
