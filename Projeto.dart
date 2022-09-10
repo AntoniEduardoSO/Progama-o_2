@@ -2,23 +2,20 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:core';
 
+enum  classes{
+  ADMIN, DEFAULT
+}
+
 class Project {
   late String name;
   late String description;
   late String coordenation;
   late int stocks;
   late int duration;
-  var time_i, time_f;
+  DateTime time_i, time_f;
 
-  // var time_i = DateTime.utc()
-
-  Project(this.name, this.description, this.coordenation, this.stocks,
-      this.duration);
-
-  // DateTime(bool inicial){
-  //  int hour = int.parse(stdin.readLineSync()!);
-  //  this.time_i = DateTime.now();
-  //}
+  Project({required this.name, required this.description, required this.coordenation, required this.time_i, required this.time_f, required this.stocks,
+      required this.duration});
 
   String get nome => this.name;
   void set nome(String value) => this.name = value;
@@ -26,11 +23,14 @@ class Project {
   String get descricao => this.description;
   void set descricao(String value) => this.description = value;
 
-  // String get hora_i => this.time_i;
-  // void set hora_i(final value) => this.time_i = value;
-
   String get coordenacao => this.coordenation;
   void set coordenacao(String value) => this.coordenation = value;
+
+  DateTime get hora_i => this.time_i;
+  void set hora_i(DateTime value) => this.time_i = value;
+
+  DateTime get hora_f => this.time_f;
+  void set hora_f(DateTime value) => this.time_f = value;
 
   int get bolsa => this.stocks;
   void set bolsa(int value) => this.stocks = value;
@@ -44,7 +44,7 @@ class User {
   late String email;
   late String password;
 
-  User(this.name, this.email, this.password);
+  User({required this.name, required this.email, required this.password});
 
   String get nome => this.name;
   void set nome(String value) => this.name = value;
@@ -65,30 +65,51 @@ class Runner {
   int i = 0;
 
   void criar_projeto(){
-    String lixo1, lixo2, lixo3;
-    int bolsa, vigencia;
+    String project_name, description, coordenation;
+    int bolsa, vigencia, hour_i, hour_f, mes, year, day;
+    DateTime hora_i = DateTime.now(), hora_f = DateTime.now();
+
+
     print('Digite o nome do projeto.');
-    lixo1 = stdin.readLineSync()!;
+    project_name = stdin.readLineSync()!;
 
     print('Digite a descrição do projeto.');
-    lixo2 = stdin.readLineSync()!;
+    description = stdin.readLineSync()!;
     
     print('Digite o coordenador do projeto.');
-    lixo3 = stdin.readLineSync()!;
+    coordenation = user[this.i].name;
     
+    print('Digite a hora inicial do projeto');
+    hour_i = int.parse(stdin.readLineSync()!);
+
+    hora_i = DateTime(hora_i.year, hora_i.month, hora_i.day, hour_i, hora_i.minute);
+    
+    print('Digite o ano final do projeto.');
+    year = int.parse(stdin.readLineSync()!);
+
+    print('Digite o mês final do projeto.');
+    mes = int.parse(stdin.readLineSync()!);
+
+    print('Digite o dia final do projeto.');
+    day = int.parse(stdin.readLineSync()!);
+
+    print('Digite a hora final do projeto.');
+    hour_f = int.parse(stdin.readLineSync()!);
+
+    hora_f = DateTime(year, mes, day, hour_f, hora_f.minute);
+
     print('Digite o valor da bolsa do projeto');
     bolsa = int.parse(stdin.readLineSync()!);
     
     print('Digite a duração da bolsa(Em meses)');
     vigencia = int.parse(stdin.readLineSync()!);
 
-    this.project.add(Project(lixo1,lixo2,lixo3,bolsa,vigencia));
+    this.project.add(Project(name: project_name, description: description, coordenation: coordenation, time_i: hora_i, time_f: hora_f, stocks: bolsa, duration: vigencia));
   }
   
 
   void removedor() {
     int escolha;
-    String lixo, lixo2;
     print('[1] -> Remover usuário');
     print('[2] -> Remover projeto.');
     print('[3] -> Remover atividade');
@@ -97,14 +118,15 @@ class Runner {
 
     switch (escolha) {
       case (1):
+        String usuario, email;
         print('Digite o usuário.');
-        lixo = stdin.readLineSync()!;
+        usuario = stdin.readLineSync()!;
 
         print('Digite o email do usuário');
-        lixo2 = stdin.readLineSync()!;
+        email = stdin.readLineSync()!;
 
         for (int i = 0; i < user.length; i++) {
-          if (user[i].name == lixo && user[i].email == lixo2) {
+          if (user[i].name == usuario && user[i].email == email) {
             print(
                 'Tem certeza que deseja remover o usuário: ${user[i].name}? [Y/N]');
             String lixinho = stdin.readLineSync()!;
@@ -120,13 +142,47 @@ class Runner {
             }
           }
         }
+
+        break;
+
+
+        case(2):
+          String project_name, coordenation, decisao;
+          bool existo = false;
+
+          print('Digite o nome do projeto.');
+          project_name = stdin.readLineSync()!;
+
+          print('Digite o nome do coordenador do projeto.');
+          coordenation = stdin.readLineSync()!;
+
+          for(int i = 0; i < project.length; i++){
+            if(project_name == project[i].name && coordenation == project[i].coordenation){
+
+              print('Deseja excluir esse projeto? ${project[i].name} com esse coordenador? ${project[i].name} [Y/N]');
+              decisao = stdin.readLineSync()!;
+
+              if(decisao == 'Y') project.removeAt(i);
+
+              else print('Projeto não excluído!');
+              existo = true;
+            }
+          }
+
+          if(existo == false){
+            print('Projeto não encontrado, Deseja tentar novamente?[Y/N]');
+            decisao = stdin.readLineSync()!;
+
+            if(decisao == 'Y') removedor();
+          }
+          
+          break;
+          
     }
   }
 
   void buscador() {
-    int escolha, i;
-    String lixo;
-    bool existo = true;
+    int escolha;
 
     print('[1] -> Buscar por usuário');
     print('[2] -> Buscar por projeto.');
@@ -136,10 +192,13 @@ class Runner {
 
     switch (escolha) {
       case (1):
+        String usuario;
+        bool existo = true;
+
         print('Digite o usuário.');
-        lixo = stdin.readLineSync()!;
+        usuario = stdin.readLineSync()!;
         for (int i = 0; i < user.length; i++) {
-          if (user[i].nome == lixo) {
+          if (user[i].name == usuario) {
             print(
                 'Nome: ${user[i].name}\n Email: ${user[i].email}\n Senha: ${user[i].password}');
             existo = false;
@@ -149,6 +208,39 @@ class Runner {
         if (existo == true) {
           print('Usuário não encontrado!');
         }
+
+        break;
+
+
+      case(2):
+        String project_name, coordenation;
+        bool existo = false;
+
+        print('Digite o nome do projeto');
+        project_name = stdin.readLineSync()!;
+
+        print('Digite o nome do coordenador');
+        coordenation = stdin.readLineSync()!;
+
+
+        for(int i = 0; i < project.length; i++){
+          if(project_name == project[i].name && coordenation == project[i].coordenation){
+            print('Nome do projeto: ${project[i].name}');
+            print('Descrição do projeto: ${project[i].description}');
+            print('Coordenador do projeto: ${project[i].coordenation}');
+            print('Horario inicial do projeto: ${project[i].time_i}');
+            print('Horario final do projeto: ${project[i].time_f}');
+            print('Valor da bolsa do projeto: ${project[i].stocks}');
+            print('Vigencia da bolsa do projeto: ${project[i].duration}');
+            existo = true;
+          }
+        }
+
+        if(existo == false) print('Não existe projeto com esse nome($coordenation) e esse coordenador($project_name)');
+
+        break;
+
+
     }
   }
 
@@ -201,18 +293,19 @@ class Runner {
   }
 
   void cadastro() {
-    String lixo1, lixo2, lixo3;
+    String user, email, password;
 
     print('Digite o nome de usuario.');
-    lixo1 = stdin.readLineSync()!;
+    user = stdin.readLineSync()!;
 
     print('Digite o email.');
-    lixo2 = stdin.readLineSync()!;
+    email = stdin.readLineSync()!;
 
     print('Digite a senha.');
-    lixo3 = stdin.readLineSync()!;
+    password = stdin.readLineSync()!;
 
-    this.user.add(User(lixo1, lixo2, lixo3));
+
+    this.user.add(User(name: user, email: email, password: password));
   }
 
   void program() {
@@ -251,7 +344,7 @@ class Runner {
           case (5):
             removedor();
             break;
-          // case(6): criar_projeto(); break;
+          case(6): criar_projeto(); break;
         }
       }
     }
