@@ -88,11 +88,16 @@ class Project {
 }
 
 class User {
+  List<Project>? projetinho;
   late String name;
   late String email;
   late String password;
 
-  User({required this.name, required this.email, required this.password});
+  User(
+      {required this.name,
+      required this.email,
+      required this.password,
+      this.projetinho});
 
   String get nome => this.name;
   void set nome(String value) => this.name = value;
@@ -102,6 +107,9 @@ class User {
 
   String get senha => this.email;
   void set senha(String value) => this.email = value;
+
+  List<Project> get projeto => this.projetinho = [];
+  void set projeto(List<Project> value) => this.projetinho = value;
 }
 
 class Runner {
@@ -113,9 +121,9 @@ class Runner {
   int i = 0;
 
   void criar_projeto() {
-    List<String> usuarios;
+    List<String> usuarios = [];
     String project_name, description, coordenation;
-    int bolsa, vigencia, hour_i, hour_f, mes, year, day;
+    int bolsa, vigencia, hour_i, hour_f, mes, year, day, j = 0;
     DateTime hora_i = DateTime.now(), hora_f = DateTime.now();
 
     print('Digite o nome do projeto.');
@@ -127,6 +135,25 @@ class Runner {
     print('Digite o coordenador do projeto.');
     coordenation = user[this.i].name;
 
+    print('Escolha os seus usuários para o projeto');
+    for (int i = 0; i < user.length; i++) {
+      print('Usuário: ${user[i].name}');
+    }
+
+    print('(Caso queira parar de escolher usuários escreva [N]');
+
+    while (1 != 0) {
+      String users = stdin.readLineSync()!;
+      if (users == 'N')
+        break;
+      else {
+        for (int i = 0; i < user.length; i++) {
+          if (users == user[i].name) {
+            usuarios.add(users);
+          }
+        }
+      }
+    }
 
     print('Digite a hora inicial do projeto');
     hour_i = int.parse(stdin.readLineSync()!);
@@ -158,11 +185,13 @@ class Runner {
         name: project_name,
         description: description,
         coordenation: coordenation,
-        professionals: ,
+        professionals: usuarios,
         time_i: hora_i,
         time_f: hora_f,
         stocks: bolsa,
         duration: vigencia));
+
+    this.user[this.i].projetinho = project;
   }
 
   void removedor() {
@@ -258,6 +287,23 @@ class Runner {
           if (user[i].name == usuario) {
             print(
                 'Nome: ${user[i].name}\n Email: ${user[i].email}\n Senha: ${user[i].password}');
+            if (user[i].projetinho != null) {
+              print('Projeto.\n${user[i].projetinho?[i].name}');
+              print(
+                  'Descrição do projeto: ${user[i].projetinho?[i].description}');
+              print(
+                  'Coordenador do projeto: ${user[i].projetinho?[i].coordenation}');
+              print(
+                  'Usuários do projeto: ${user[i].projetinho?[i].professionals}');
+              print(
+                  'Horario inicial do projeto: ${user[i].projetinho?[i].time_i}');
+              print(
+                  'Horario final do projeto: ${user[i].projetinho?[i].time_f}');
+              print(
+                  'Valor da bolsa do projeto: ${user[i].projetinho?[i].stocks}');
+              print(
+                  'Vigencia da bolsa do projeto: ${user[i].projetinho?[i].duration}');
+            }
             existo = false;
           }
         }
@@ -284,6 +330,7 @@ class Runner {
             print('Nome do projeto: ${project[i].name}');
             print('Descrição do projeto: ${project[i].description}');
             print('Coordenador do projeto: ${project[i].coordenation}');
+            print('Usuários do projeto: ${project[i].professionals}');
             print('Horario inicial do projeto: ${project[i].time_i}');
             print('Horario final do projeto: ${project[i].time_f}');
             print('Valor da bolsa do projeto: ${project[i].stocks}');
