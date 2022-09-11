@@ -2,19 +2,64 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:core';
 
-enum  classes{
-  ADMIN, DEFAULT
+enum classes { ADMIN, DEFAULT }
+
+class Activity {
+  late String name;
+  late String description;
+  DateTime time_i, time_f;
+  late String coordenation;
+  late List<String> users;
+  late Map<String, String> activity;
+
+  Activity(
+      {required this.name,
+      required this.description,
+      required this.time_i,
+      required this.time_f,
+      required this.coordenation,
+      required this.users,
+      required this.activity});
+
+  String get nome => this.name;
+  void set nome(String value) => this.name = value;
+
+  String get descricao => this.description;
+  void set descricao(String value) => this.description = value;
+
+  DateTime get hora_i => this.time_i;
+  void set hora_i(DateTime value) => this.time_i = value;
+
+  DateTime get hora_f => this.time_f;
+  void set hora_f(DateTime value) => this.time_f = value;
+
+  String get coordenacao => this.coordenation;
+  void set coordenacao(String value) => this.coordenation = value;
+
+  List<String> get usuario => this.users;
+  void set usuario(List<String> value) => this.users = value;
+
+  Map<String, String> get atividade => this.activity;
+  void set atividade(Map<String, String> value) => this.activity = value;
 }
 
 class Project {
   late String name;
   late String description;
   late String coordenation;
+  late List<String> professionals;
   late int stocks;
   late int duration;
   DateTime time_i, time_f;
 
-  Project({required this.name, required this.description, required this.coordenation, required this.time_i, required this.time_f, required this.stocks,
+  Project(
+      {required this.name,
+      required this.description,
+      required this.coordenation,
+      required this.professionals,
+      required this.time_i,
+      required this.time_f,
+      required this.stocks,
       required this.duration});
 
   String get nome => this.name;
@@ -25,6 +70,9 @@ class Project {
 
   String get coordenacao => this.coordenation;
   void set coordenacao(String value) => this.coordenation = value;
+
+  List<String> get profissionais => this.professionals;
+  void set profissionais(List<String> value) => this.professionals = value;
 
   DateTime get hora_i => this.time_i;
   void set hora_i(DateTime value) => this.time_i = value;
@@ -64,26 +112,28 @@ class Runner {
   late int escolha;
   int i = 0;
 
-  void criar_projeto(){
+  void criar_projeto() {
+    List<String> usuarios;
     String project_name, description, coordenation;
     int bolsa, vigencia, hour_i, hour_f, mes, year, day;
     DateTime hora_i = DateTime.now(), hora_f = DateTime.now();
-
 
     print('Digite o nome do projeto.');
     project_name = stdin.readLineSync()!;
 
     print('Digite a descrição do projeto.');
     description = stdin.readLineSync()!;
-    
+
     print('Digite o coordenador do projeto.');
     coordenation = user[this.i].name;
-    
+
+
     print('Digite a hora inicial do projeto');
     hour_i = int.parse(stdin.readLineSync()!);
 
-    hora_i = DateTime(hora_i.year, hora_i.month, hora_i.day, hour_i, hora_i.minute);
-    
+    hora_i =
+        DateTime(hora_i.year, hora_i.month, hora_i.day, hour_i, hora_i.minute);
+
     print('Digite o ano final do projeto.');
     year = int.parse(stdin.readLineSync()!);
 
@@ -100,13 +150,20 @@ class Runner {
 
     print('Digite o valor da bolsa do projeto');
     bolsa = int.parse(stdin.readLineSync()!);
-    
+
     print('Digite a duração da bolsa(Em meses)');
     vigencia = int.parse(stdin.readLineSync()!);
 
-    this.project.add(Project(name: project_name, description: description, coordenation: coordenation, time_i: hora_i, time_f: hora_f, stocks: bolsa, duration: vigencia));
+    this.project.add(Project(
+        name: project_name,
+        description: description,
+        coordenation: coordenation,
+        professionals: ,
+        time_i: hora_i,
+        time_f: hora_f,
+        stocks: bolsa,
+        duration: vigencia));
   }
-  
 
   void removedor() {
     int escolha;
@@ -145,39 +202,39 @@ class Runner {
 
         break;
 
+      case (2):
+        String project_name, coordenation, decisao;
+        bool existo = false;
 
-        case(2):
-          String project_name, coordenation, decisao;
-          bool existo = false;
+        print('Digite o nome do projeto.');
+        project_name = stdin.readLineSync()!;
 
-          print('Digite o nome do projeto.');
-          project_name = stdin.readLineSync()!;
+        print('Digite o nome do coordenador do projeto.');
+        coordenation = stdin.readLineSync()!;
 
-          print('Digite o nome do coordenador do projeto.');
-          coordenation = stdin.readLineSync()!;
-
-          for(int i = 0; i < project.length; i++){
-            if(project_name == project[i].name && coordenation == project[i].coordenation){
-
-              print('Deseja excluir esse projeto? ${project[i].name} com esse coordenador? ${project[i].name} [Y/N]');
-              decisao = stdin.readLineSync()!;
-
-              if(decisao == 'Y') project.removeAt(i);
-
-              else print('Projeto não excluído!');
-              existo = true;
-            }
-          }
-
-          if(existo == false){
-            print('Projeto não encontrado, Deseja tentar novamente?[Y/N]');
+        for (int i = 0; i < project.length; i++) {
+          if (project_name == project[i].name &&
+              coordenation == project[i].coordenation) {
+            print(
+                'Deseja excluir esse projeto? ${project[i].name} com esse coordenador? ${project[i].name} [Y/N]');
             decisao = stdin.readLineSync()!;
 
-            if(decisao == 'Y') removedor();
+            if (decisao == 'Y')
+              project.removeAt(i);
+            else
+              print('Projeto não excluído!');
+            existo = true;
           }
-          
-          break;
-          
+        }
+
+        if (existo == false) {
+          print('Projeto não encontrado, Deseja tentar novamente?[Y/N]');
+          decisao = stdin.readLineSync()!;
+
+          if (decisao == 'Y') removedor();
+        }
+
+        break;
     }
   }
 
@@ -211,8 +268,7 @@ class Runner {
 
         break;
 
-
-      case(2):
+      case (2):
         String project_name, coordenation;
         bool existo = false;
 
@@ -222,9 +278,9 @@ class Runner {
         print('Digite o nome do coordenador');
         coordenation = stdin.readLineSync()!;
 
-
-        for(int i = 0; i < project.length; i++){
-          if(project_name == project[i].name && coordenation == project[i].coordenation){
+        for (int i = 0; i < project.length; i++) {
+          if (project_name == project[i].name &&
+              coordenation == project[i].coordenation) {
             print('Nome do projeto: ${project[i].name}');
             print('Descrição do projeto: ${project[i].description}');
             print('Coordenador do projeto: ${project[i].coordenation}');
@@ -236,11 +292,11 @@ class Runner {
           }
         }
 
-        if(existo == false) print('Não existe projeto com esse nome($coordenation) e esse coordenador($project_name)');
+        if (existo == false)
+          print(
+              'Não existe projeto com esse nome($coordenation) e esse coordenador($project_name)');
 
         break;
-
-
     }
   }
 
@@ -304,7 +360,6 @@ class Runner {
     print('Digite a senha.');
     password = stdin.readLineSync()!;
 
-
     this.user.add(User(name: user, email: email, password: password));
   }
 
@@ -315,11 +370,12 @@ class Runner {
       print('[1] -> Cadastrar usuário.');
       print('[2] -> Fazer login.');
       print('[3] -> Recuperar senha.');
+      print('[4] -> Sair do programa.');
 
       if (this.loginho == true) {
-        print('[4] -> Buscador.');
-        print('[5] -> Removedor.');
-        print('[6] -> Criar projeto.');
+        print('[5] -> Buscador.');
+        print('[6] -> Removedor.');
+        print('[7] -> Criar projeto.');
       }
 
       escolha = int.parse(stdin.readLineSync()!);
@@ -334,17 +390,21 @@ class Runner {
         case (3):
           refazer_senha();
           break;
+        case (4):
+          return;
       }
 
       if (this.loginho == true) {
         switch (escolha) {
-          case (4):
+          case (5):
             buscador();
             break;
-          case (5):
+          case (6):
             removedor();
             break;
-          case(6): criar_projeto(); break;
+          case (7):
+            criar_projeto();
+            break;
         }
       }
     }
