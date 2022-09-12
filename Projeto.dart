@@ -2,12 +2,11 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:core';
 
-enum classes { ADMIN, DEFAULT }
-
 class Activity {
   late String name;
   late String description;
-  DateTime time_i, time_f;
+  DateTime time_i;
+  DateTime? time_f;
   late String coordenation;
   late List<String> users;
   late Map<String, String> activity;
@@ -16,7 +15,7 @@ class Activity {
       {required this.name,
       required this.description,
       required this.time_i,
-      required this.time_f,
+      this.time_f,
       required this.coordenation,
       required this.users,
       required this.activity});
@@ -30,8 +29,8 @@ class Activity {
   DateTime get hora_i => this.time_i;
   void set hora_i(DateTime value) => this.time_i = value;
 
-  DateTime get hora_f => this.time_f;
-  void set hora_f(DateTime value) => this.time_f = value;
+  DateTime? get hora_f => this.time_f;
+  void set hora_f(DateTime? value) => this.time_f = value;
 
   String get coordenacao => this.coordenation;
   void set coordenacao(String value) => this.coordenation = value;
@@ -44,21 +43,24 @@ class Activity {
 }
 
 class Project {
+  Activity activity;
   late String name;
   late String description;
   late String coordenation;
   late List<String> professionals;
   late int stocks;
   late int duration;
-  DateTime time_i, time_f;
+  DateTime time_i;
+  DateTime? time_f;
 
   Project(
       {required this.name,
       required this.description,
       required this.coordenation,
       required this.professionals,
+      required this.activity,
       required this.time_i,
-      required this.time_f,
+       this.time_f,
       required this.stocks,
       required this.duration});
 
@@ -74,11 +76,14 @@ class Project {
   List<String> get profissionais => this.professionals;
   void set profissionais(List<String> value) => this.professionals = value;
 
+  Activity get atividade => this.activity;
+  void set atividade(Activity value) => this.activity = value;
+
   DateTime get hora_i => this.time_i;
   void set hora_i(DateTime value) => this.time_i = value;
 
-  DateTime get hora_f => this.time_f;
-  void set hora_f(DateTime value) => this.time_f = value;
+  DateTime? get hora_f => this.time_f;
+  void set hora_f(DateTime? value) => this.time_f = value;
 
   int get bolsa => this.stocks;
   void set bolsa(int value) => this.stocks = value;
@@ -121,59 +126,79 @@ class Runner {
   int i = 0;
 
   void criar_projeto() {
-    List<String> usuarios = [];
-    String project_name, description, coordenation;
-    int bolsa, vigencia, hour_i, hour_f, mes, year, day, j = 0;
+    List<String> project_users = [];
+    String project_name, project_description, project_coordenation;
+    int bolsa, vigencia, project_hour_i, project_hour_f, j = 0;
     DateTime hora_i = DateTime.now(), hora_f = DateTime.now();
 
     print('Digite o nome do projeto.');
     project_name = stdin.readLineSync()!;
 
     print('Digite a descrição do projeto.');
-    description = stdin.readLineSync()!;
+    project_description = stdin.readLineSync()!;
 
     print('Digite o coordenador do projeto.');
-    coordenation = user[this.i].name;
+    project_coordenation = user[this.i].name;
 
     print('Escolha os seus usuários para o projeto');
-    for (int i = 0; i < user.length; i++) {
-      print('Usuário: ${user[i].name}');
-    }
-
+    for (int i = 0; i < user.length; i++)  print('Usuário: ${user[i].name}');
+    
     print('(Caso queira parar de escolher usuários escreva [N]');
 
     while (1 != 0) {
       String users = stdin.readLineSync()!;
-      if (users == 'N')
-        break;
+      if (users == 'N') break;
       else {
         for (int i = 0; i < user.length; i++) {
           if (users == user[i].name) {
-            usuarios.add(users);
+            project_users.add(users);
           }
         }
       }
     }
 
-    print('Digite a hora inicial do projeto');
-    hour_i = int.parse(stdin.readLineSync()!);
+    Map<String,String> activity = Map();
+    List<String> activity_users = [];
+    String activity_name, activity_description, activity_coordenation;
+    DateTime activity_hora_i;
 
-    hora_i =
-        DateTime(hora_i.year, hora_i.month, hora_i.day, hour_i, hora_i.minute);
 
-    print('Digite o ano final do projeto.');
-    year = int.parse(stdin.readLineSync()!);
+    print('Diga o nome para atividade');
+    activity_name = stdin.readLineSync()!;
 
-    print('Digite o mês final do projeto.');
-    mes = int.parse(stdin.readLineSync()!);
+    print('Diga a descrição da atividade');
+    activity_description = stdin.readLineSync()!;
 
-    print('Digite o dia final do projeto.');
-    day = int.parse(stdin.readLineSync()!);
+    activity_hora_i = DateTime.now();
 
-    print('Digite a hora final do projeto.');
-    hour_f = int.parse(stdin.readLineSync()!);
+    print('O coordenador será o criador do projeto');
+    activity_coordenation = user[this.i].name;
 
-    hora_f = DateTime(year, mes, day, hour_f, hora_f.minute);
+    print('Usuários disponíveis para ocupar as atividades: ');
+    for(int i = 0; i < project_users.length; i++) print('Usuário: ${project_users}');
+
+    print('Digite os usuários disponíveis para entrar nas atividades, caso queira não colocar ninguém ou parar de inserir digite [N]');
+    while (1 != 0) {
+      String often_users = stdin.readLineSync()!;
+      if (often_users == 'N') break;
+      else {
+        for (int i = 0; i < user.length; i++) {
+          if (often_users == user[i].name) {
+            activity_users.add(often_users);
+          }
+        }
+      }
+    }
+
+    for(int i = 0; i < activity_users.length;i++){
+      String job;
+      print('O que o usário ${activity_users[i]} vai fazer?, caso queria fazer nada digite [N]');
+      job = stdin.readLineSync()!;
+
+      if(job != 'N') activity[activity_users[i]] = job;
+    }
+
+    print('-------------------------x--------------------------');
 
     print('Digite o valor da bolsa do projeto');
     bolsa = int.parse(stdin.readLineSync()!);
@@ -181,17 +206,28 @@ class Runner {
     print('Digite a duração da bolsa(Em meses)');
     vigencia = int.parse(stdin.readLineSync()!);
 
+    Activity atividade = Activity(name: activity_name,
+        description: activity_description,
+        time_i: activity_hora_i,
+        coordenation: activity_coordenation,
+        users: activity_users,
+        activity: activity);
+
     this.project.add(Project(
         name: project_name,
-        description: description,
-        coordenation: coordenation,
-        professionals: usuarios,
+        description: project_description,
+        coordenation: project_coordenation,
+        activity: atividade,
+        professionals: project_users,
         time_i: hora_i,
-        time_f: hora_f,
         stocks: bolsa,
         duration: vigencia));
 
-    this.user[this.i].projetinho = project;
+    for(int i = 0; i < user.length; i++){
+      for(int j = 0; j < project_users.length; j++){
+        if(this.user[i].name == project_users[j]) this.user[i].projetinho = project;
+      }
+    }
   }
 
   void removedor() {
@@ -285,24 +321,24 @@ class Runner {
         usuario = stdin.readLineSync()!;
         for (int i = 0; i < user.length; i++) {
           if (user[i].name == usuario) {
-            print(
-                'Nome: ${user[i].name}\n Email: ${user[i].email}\n Senha: ${user[i].password}');
+            print('Nome: ${user[i].name}\n Email: ${user[i].email}\n Senha: ${user[i].password}');
             if (user[i].projetinho != null) {
-              print('Projeto.\n${user[i].projetinho?[i].name}');
-              print(
-                  'Descrição do projeto: ${user[i].projetinho?[i].description}');
-              print(
-                  'Coordenador do projeto: ${user[i].projetinho?[i].coordenation}');
-              print(
-                  'Usuários do projeto: ${user[i].projetinho?[i].professionals}');
-              print(
-                  'Horario inicial do projeto: ${user[i].projetinho?[i].time_i}');
-              print(
-                  'Horario final do projeto: ${user[i].projetinho?[i].time_f}');
-              print(
-                  'Valor da bolsa do projeto: ${user[i].projetinho?[i].stocks}');
-              print(
-                  'Vigencia da bolsa do projeto: ${user[i].projetinho?[i].duration}');
+              print('--------------------------PROJETO--------------------------------');
+              print('Projeto: ${user[i].projetinho?[i].name}');
+              print('Descrição do projeto: ${user[i].projetinho?[i].description}');
+              print('Coordenador do projeto: ${user[i].projetinho?[i].coordenation}');
+              print('Usuários do projeto: ${user[i].projetinho?[i].professionals}');
+              print('Horario inicial do projeto: ${user[i].projetinho?[i].time_i}');
+              if(user[i].projetinho?[i].time_f != null) print('Horario final do projeto: ${user[i].projetinho?[i].time_f}');
+              print('Valor da bolsa do projeto: ${user[i].projetinho?[i].stocks}');
+              print('Vigencia da bolsa do projeto: ${user[i].projetinho?[i].duration}');
+              print('--------------------------ATIVIDADE------------------------------');
+              print('Nome da Atividade: ${user[i].projetinho?[i].activity.name}');
+              print('Descrição da Atividade: ${user[i].projetinho?[i].activity.description}');
+              print('Horário inicial da Atividade: ${user[i].projetinho?[i].activity.time_i}');
+              print('Responsável pela Atividade: ${user[i].projetinho?[i].activity.coordenation}');
+              print('Usuários da atividade: ${user[i].projetinho?[i].activity.users}');
+              print('Responsabilidade dos Usuários: ${user[i].projetinho?[i].activity.activity}');
             }
             existo = false;
           }
