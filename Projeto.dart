@@ -237,6 +237,108 @@ class Runner {
     print('Projeto e atividade FEITOS!!!!!');
   }
 
+  void editar_usuario(){
+    int escolha;
+    print('[1] -> Editar o nome de usuário.');
+    print('[2] -> Editar o email.');
+    print('[3] -> Editar senha.');
+
+    escolha = int.parse(stdin.readLineSync()!);
+
+    switch(escolha){
+        case(1):
+          String input;
+          int activity_users_tam = 0, activity_activity_tam = 0;
+        
+          print('Digite o nome do usuário que deseja mudar.');
+          input = stdin.readLineSync()!;
+        
+          for(int i = 0; i < user.length;i++){
+            if(user[i].name == input){
+              String user_name;
+              print('Digite o novo nome de usuário para o usuário: ${user[i].name}.');
+              user_name = stdin.readLineSync()!;
+              user[i].name = user_name;
+                  
+                for(int k = 0; k < project[j].activity!.users.length; k++){
+                  if(project[j].activity?.users[k] == input){
+                    project[j].activity?.users[k] = input;
+                  }
+                  
+                }
+                
+                
+                
+                for(int k = 0; k < project[j].user.length;k++){
+                  if(user[i].name == project[j].user[k].name){
+                    project[j].user[k].name = user_name;
+                  }
+                }
+              }
+
+
+              
+              print('Edição feita!');
+            }
+          }
+        
+          break;
+
+        case(2):
+          String input;
+        
+          print('Digite o nome do usuário que deseja mudar o email');
+          input = stdin.readLineSync()!;
+
+          for(int i = 0; i < user.length;i++){
+            if(user[i].name == input){
+              String user_email;
+              print('Digite o novo email para o usuário: ${user[i].name}.');
+              user_email = stdin.readLineSync()!;
+              user[i].email = user_email;
+              print('Edição feita!');
+            }
+          }
+          
+          break;
+
+        case(3):
+          String input;
+        
+          print('Digite o nome do usuário que deseja mudar a senha');
+          input = stdin.readLineSync()!;
+
+          for(int i = 0; i < user.length;i++){
+            if(user[i].name == input){
+              String user_password;
+              print('Digite a nova senha para o usuário: ${user[i].name}.');
+              user_password = stdin.readLineSync()!;
+              user[i].password = user_password;
+              print('Edição feita!');
+            }
+          }
+        
+          break;
+      
+    }
+
+  }
+  
+  void editar() {
+    int escolha;
+    
+    print('[1] -> Editar usuário.');
+    print('[2] -> Editar projeto.');
+    print('[3] -> Editar atividade.');
+
+    escolha = int.parse(stdin.readLineSync()!);
+    switch(escolha){
+        case(1): editar_usuario(); break;
+        // case(2): editar_projeto(); break;
+        // case(3): editar_atividade(); break;
+    }
+  }
+
   void removedor() {
     int escolha;
     print('[1] -> Remover usuário');
@@ -371,8 +473,7 @@ class Runner {
         coordenation = stdin.readLineSync()!;
 
         for (int i = 0; i < project.length; i++) {
-          if (project_name == project[i].name &&
-              coordenation == project[i].coordenation) {
+          if (project_name == project[i].name && coordenation == project[i].coordenation) {
             print('-----------------PROJETO: ${project[i].name.toUpperCase()}-----------------\n');
             print('Nome do projeto: ${project[i].name}');
             print('Descrição do projeto: ${project[i].description}');
@@ -395,9 +496,33 @@ class Runner {
 
         if (existo == false)
           print(
-              'Não existe projeto com esse nome($coordenation) e esse coordenador($project_name)');
+              'Não existe projeto com esse nome($project_name) e esse coordenador($coordenation)');
 
         break;
+
+        case(3):
+        
+          String activity_name, activity_coordenation;
+        
+          print('Digite o nome da atividade');
+          activity_name = stdin.readLineSync()!;
+
+          print('Digite o nome do coordenador do curso');
+          activity_coordenation = stdin.readLineSync()!;
+
+          for(int i = 0; i < this.activity.length;i++){
+            if(activity_name == activity[i].name && activity_coordenation == activity[i].coordenation){
+              print('----------------ATIVIDADE: ${activity[i].name.toUpperCase()}----------------\n');
+            print('Nome do projeto: ${activity[i].name}');
+            print('Descrição do projeto: ${activity[i].description}');
+            print('Coordenador do projeto: ${activity[i].coordenation}');
+            print('Usuários do projeto: ${activity[i].users}');
+            print('Horario inicial do projeto: ${activity[i].time_i}');
+            print('Valor da bolsa do projeto: ${activity[i].activity}');
+            }
+          }
+
+          break;
     }
   }
 
@@ -477,6 +602,7 @@ class Runner {
         print('[5] -> Buscador.');
         print('[6] -> Removedor.');
         print('[7] -> Criar projeto.');
+        print('[8] -> Editar.');
       }
 
       escolha = int.parse(stdin.readLineSync()!);
@@ -505,6 +631,9 @@ class Runner {
             break;
           case (7):
             criar_projeto();
+            break;
+          case(8):
+            editar();
             break;
         }
       }
