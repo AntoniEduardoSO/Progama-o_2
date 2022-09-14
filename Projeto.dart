@@ -124,7 +124,6 @@ class Runner {
   int i = 0;
 
   void criar_projeto() {
-    
     List<User> project_user = [];
     List<String> project_professionals = [];
     String project_name, project_description, project_coordenation;
@@ -199,19 +198,19 @@ class Runner {
     }
 
     print('Usuários disponíveis para os trabalhos');
-    for (int i = 0; i < activity_professionals.length; i++)print('Usuário: ${activity_professionals[i]}');
+    for (int i = 0; i < activity_professionals.length; i++)
+      print('Usuário: ${activity_professionals[i]}');
 
-    
-    for (int i = 0;i < activity_professionals.length; i++) {
+    for (int i = 0; i < activity_professionals.length; i++) {
       print('O que o usuário ${activity_professionals[i]} irá fazer?');
 
       String job = stdin.readLineSync()!;
-      activity_jobs.addAll({activity_professionals[i] : job});
+      activity_jobs.addAll({activity_professionals[i]: job});
     }
 
     project_time_i = DateTime.now();
     activity_time_i = DateTime.now();
-    
+
     this.activity.add(Activity(
         name: activity_name,
         description: activity_description,
@@ -221,7 +220,7 @@ class Runner {
         activity: activity_jobs));
 
     int activity_index = activity.length - 1;
-    
+
     this.project.add(Project(
         name: project_name,
         description: project_description,
@@ -231,13 +230,12 @@ class Runner {
         time_i: project_time_i,
         stocks: project_stocks,
         duration: project_duration,
-        user: user
-        ));
+        user: user));
 
     print('Projeto e atividade FEITOS!!!!!');
   }
 
-  void editar_usuario(){
+  void editar_usuario() {
     int escolha;
     print('[1] -> Editar o nome de usuário.');
     print('[2] -> Editar o email.');
@@ -245,97 +243,103 @@ class Runner {
 
     escolha = int.parse(stdin.readLineSync()!);
 
-    switch(escolha){
-        case(1):
-          String input;
-          int activity_users_tam = 0, activity_activity_tam = 0;
-        
-          print('Digite o nome do usuário que deseja mudar.');
-          input = stdin.readLineSync()!;
-        
-          for(int i = 0; i < user.length;i++){
-            if(user[i].name == input){
-              String user_name;
-              print('Digite o novo nome de usuário para o usuário: ${user[i].name}.');
-              user_name = stdin.readLineSync()!;
-              user[i].name = user_name;
-                  
-                for(int k = 0; k < project[j].activity!.users.length; k++){
-                  if(project[j].activity?.users[k] == input){
-                    project[j].activity?.users[k] = input;
-                  }
-                  
-                }
-                
-                
-                
-                for(int k = 0; k < project[j].user.length;k++){
-                  if(user[i].name == project[j].user[k].name){
-                    project[j].user[k].name = user_name;
-                  }
+    switch (escolha) {
+      case (1):
+        String input;
+        int activity_users_tam = 0, activity_activity_tam = 0;
+
+        print('Digite o nome do usuário que deseja mudar.');
+        input = stdin.readLineSync()!;
+
+        for (int i = 0; i < user.length; i++) {
+          if (user[i].name == input) {
+            String user_name;
+            print(
+                'Digite o novo nome de usuário para o usuário: ${user[i].name}.');
+            user_name = stdin.readLineSync()!;
+
+            for (int j = 0; j < project.length; j++) {
+              for (int k = 0; k < project[j].professionals.length; k++) {
+                if (project[j].professionals[k] == user[i].name) {
+                  project[j].professionals[k] = user_name;
                 }
               }
 
+              for (int k = 0; k < project[j].activity!.users.length; k++) {
+                if (project[j].activity?.users[k] == user[i].name) {
+                  project[j].activity?.users[k] == user_name;
+                }
+              }
 
-              
-              print('Edição feita!');
+              for (int k = 0; k < project[j].activity!.activity.length; k++) {
+                if (project[j].activity!.activity.containsKey(user[i].name)) {
+                  Map<String, String> trash = Map();
+                  print(project[j].activity!.activity.values);
+                  trash.addAll({
+                    user_name: project[j].activity!.activity.values.toString()
+                  });
+                  project[j].activity!.activity[user[i].name] = trash;
+                }
+              }
             }
+            user[i].name = user_name;
           }
-        
-          break;
+        }
 
-        case(2):
-          String input;
-        
-          print('Digite o nome do usuário que deseja mudar o email');
-          input = stdin.readLineSync()!;
+        break;
 
-          for(int i = 0; i < user.length;i++){
-            if(user[i].name == input){
-              String user_email;
-              print('Digite o novo email para o usuário: ${user[i].name}.');
-              user_email = stdin.readLineSync()!;
-              user[i].email = user_email;
-              print('Edição feita!');
-            }
+      case (2):
+        String input;
+
+        print('Digite o nome do usuário que deseja mudar o email');
+        input = stdin.readLineSync()!;
+
+        for (int i = 0; i < user.length; i++) {
+          if (user[i].name == input) {
+            String user_email;
+            print('Digite o novo email para o usuário: ${user[i].name}.');
+            user_email = stdin.readLineSync()!;
+            user[i].email = user_email;
+            print('Edição feita!');
           }
-          
-          break;
+        }
 
-        case(3):
-          String input;
-        
-          print('Digite o nome do usuário que deseja mudar a senha');
-          input = stdin.readLineSync()!;
+        break;
 
-          for(int i = 0; i < user.length;i++){
-            if(user[i].name == input){
-              String user_password;
-              print('Digite a nova senha para o usuário: ${user[i].name}.');
-              user_password = stdin.readLineSync()!;
-              user[i].password = user_password;
-              print('Edição feita!');
-            }
+      case (3):
+        String input;
+
+        print('Digite o nome do usuário que deseja mudar a senha');
+        input = stdin.readLineSync()!;
+
+        for (int i = 0; i < user.length; i++) {
+          if (user[i].name == input) {
+            String user_password;
+            print('Digite a nova senha para o usuário: ${user[i].name}.');
+            user_password = stdin.readLineSync()!;
+            user[i].password = user_password;
+            print('Edição feita!');
           }
-        
-          break;
-      
+        }
+
+        break;
     }
-
   }
-  
+
   void editar() {
     int escolha;
-    
+
     print('[1] -> Editar usuário.');
     print('[2] -> Editar projeto.');
     print('[3] -> Editar atividade.');
 
     escolha = int.parse(stdin.readLineSync()!);
-    switch(escolha){
-        case(1): editar_usuario(); break;
-        // case(2): editar_projeto(); break;
-        // case(3): editar_atividade(); break;
+    switch (escolha) {
+      case (1):
+        editar_usuario();
+        break;
+      // case(2): editar_projeto(); break;
+      // case(3): editar_atividade(); break;
     }
   }
 
@@ -430,25 +434,33 @@ class Runner {
         usuario = stdin.readLineSync()!;
         for (int i = 0; i < user.length; i++) {
           if (user[i].name == usuario) {
-            print('Nome: ${user[i].name}\n Email: ${user[i].email}\n Senha: ${user[i].password}');
-            for(int j = 0; j < project.length;j++){
-              for(int k = 0; k <  project[j].user.length;k++){
-                if(user[i].name == project[j].user[k].name){
-                  print('-----------------PROJETO: ${project[j].name.toUpperCase()}-----------------\n');
+            print(
+                'Nome: ${user[i].name}\n Email: ${user[i].email}\n Senha: ${user[i].password}');
+            for (int j = 0; j < project.length; j++) {
+              for (int k = 0; k < project[j].user.length; k++) {
+                if (user[i].name == project[j].user[k].name) {
+                  print(
+                      '-----------------PROJETO: ${project[j].name.toUpperCase()}-----------------\n');
                   print('Nome do projeto: ${project[j].name}');
                   print('Descrição do projeto: ${project[j].description}');
                   print('Coordenador do projeto: ${project[j].coordenation}');
                   print('Usuários do projeto: ${project[j].professionals}');
                   print('Horario inicial do projeto: ${project[j].time_i}');
                   print('Valor da bolsa do projeto: ${project[j].stocks}');
-                  print('Vigencia da bolsa do projeto: ${project[j].duration}\n');
-                  print('----------------ATIVIDADE: ${project[j].activity?.name.toUpperCase()}----------------\n');
-                  print('Nome do projeto: ${project[j].activity?.name}');
-                  print('Descrição do projeto: ${project[j].activity?.description}');
-                  print('Coordenador do projeto: ${project[j].activity?.coordenation}');
-                  print('Usuários do projeto: ${project[j].activity?.users}');
-                  print('Horario inicial do projeto: ${project[j].activity?.time_i}');
-                  print('Valor da bolsa do projeto: ${project[j].activity?.activity}');
+                  print(
+                      'Vigencia da bolsa do projeto: ${project[j].duration}\n');
+                  print(
+                      '----------------ATIVIDADE: ${project[j].activity?.name.toUpperCase()}----------------\n');
+                  print('Nome da atividade: ${project[j].activity?.name}');
+                  print(
+                      'Descrição do atividade: ${project[j].activity?.description}');
+                  print(
+                      'Coordenador da atividade: ${project[j].activity?.coordenation}');
+                  print('Usuários da atividade: ${project[j].activity?.users}');
+                  print(
+                      'Horario inicial da atividade: ${project[j].activity?.time_i}');
+                  print(
+                      'Tarefas de cada usuário: ${project[j].activity?.activity}');
                 }
               }
             }
@@ -473,8 +485,10 @@ class Runner {
         coordenation = stdin.readLineSync()!;
 
         for (int i = 0; i < project.length; i++) {
-          if (project_name == project[i].name && coordenation == project[i].coordenation) {
-            print('-----------------PROJETO: ${project[i].name.toUpperCase()}-----------------\n');
+          if (project_name == project[i].name &&
+              coordenation == project[i].coordenation) {
+            print(
+                '-----------------PROJETO: ${project[i].name.toUpperCase()}-----------------\n');
             print('Nome do projeto: ${project[i].name}');
             print('Descrição do projeto: ${project[i].description}');
             print('Coordenador do projeto: ${project[i].coordenation}');
@@ -483,13 +497,16 @@ class Runner {
             print('Horario final do projeto: ${project[i].time_f}');
             print('Valor da bolsa do projeto: ${project[i].stocks}');
             print('Vigencia da bolsa do projeto: ${project[i].duration}');
-            print('----------------ATIVIDADE: ${project[i].activity?.name.toUpperCase()}----------------\n');
+            print(
+                '----------------ATIVIDADE: ${project[i].activity?.name.toUpperCase()}----------------\n');
             print('Nome do projeto: ${project[i].activity?.name}');
             print('Descrição do projeto: ${project[i].activity?.description}');
-            print('Coordenador do projeto: ${project[i].activity?.coordenation}');
+            print(
+                'Coordenador do projeto: ${project[i].activity?.coordenation}');
             print('Usuários do projeto: ${project[i].activity?.users}');
             print('Horario inicial do projeto: ${project[i].activity?.time_i}');
-            print('Valor da bolsa do projeto: ${project[i].activity?.activity}');
+            print(
+                'Valor da bolsa do projeto: ${project[i].activity?.activity}');
             existo = true;
           }
         }
@@ -500,29 +517,30 @@ class Runner {
 
         break;
 
-        case(3):
-        
-          String activity_name, activity_coordenation;
-        
-          print('Digite o nome da atividade');
-          activity_name = stdin.readLineSync()!;
+      case (3):
+        String activity_name, activity_coordenation;
 
-          print('Digite o nome do coordenador do curso');
-          activity_coordenation = stdin.readLineSync()!;
+        print('Digite o nome da atividade');
+        activity_name = stdin.readLineSync()!;
 
-          for(int i = 0; i < this.activity.length;i++){
-            if(activity_name == activity[i].name && activity_coordenation == activity[i].coordenation){
-              print('----------------ATIVIDADE: ${activity[i].name.toUpperCase()}----------------\n');
+        print('Digite o nome do coordenador do curso');
+        activity_coordenation = stdin.readLineSync()!;
+
+        for (int i = 0; i < this.activity.length; i++) {
+          if (activity_name == activity[i].name &&
+              activity_coordenation == activity[i].coordenation) {
+            print(
+                '----------------ATIVIDADE: ${activity[i].name.toUpperCase()}----------------\n');
             print('Nome do projeto: ${activity[i].name}');
             print('Descrição do projeto: ${activity[i].description}');
             print('Coordenador do projeto: ${activity[i].coordenation}');
             print('Usuários do projeto: ${activity[i].users}');
             print('Horario inicial do projeto: ${activity[i].time_i}');
             print('Valor da bolsa do projeto: ${activity[i].activity}');
-            }
           }
+        }
 
-          break;
+        break;
     }
   }
 
@@ -632,7 +650,7 @@ class Runner {
           case (7):
             criar_projeto();
             break;
-          case(8):
+          case (8):
             editar();
             break;
         }
