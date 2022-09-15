@@ -149,8 +149,7 @@ class Runner {
     print('Usuários disponíveis para entrar no projeto:');
     for (int i = 0; i < user.length; i++) print('Usuário: ${user[i].name}');
 
-    print(
-        'Digite os usuários que você deseja para o projeto. * Codigo de parada é [N] *');
+    print('Digite os usuários que você deseja para o projeto. * Codigo de parada é [N] *');
 
     for (;;) {
       String input = stdin.readLineSync()!;
@@ -193,7 +192,8 @@ class Runner {
     print('Usuários disponíveis para a atividade.');
     for (int i = 0; i < project_professionals.length; i++)
       print('Usuário: ${project_professionals[i]}');
-
+    
+    print('Digite os usuários que você deseja para o atividade. * Codigo de parada é [N] *');
     for (;;) {
       String input = stdin.readLineSync()!;
       if (input == 'N') break;
